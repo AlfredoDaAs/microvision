@@ -30,4 +30,8 @@ class User extends Authenticatable
     protected $hidden = [
         'Password', 'remember_token',
     ];
+
+    public function manufacturer() {
+        //sreturn $this->belongsTo()
+    }
 }
