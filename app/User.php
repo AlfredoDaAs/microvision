@@ -32,6 +32,19 @@ class User extends Authenticatable
     ];
 
     public function manufacturer() {
-        //sreturn $this->belongsTo()
+        return $this->belongsTo('App\Manufacturer', 'ManufacturerID', 'ID');
+    }
+
+    public function getAuthPassword()
+    {
+        return $this->Password;
+    }
+
+    public function isAdmin(){
+        if($this->manufacturer->isAdmin){
+            return true;
+        }
+
+        return false;
     }
 }

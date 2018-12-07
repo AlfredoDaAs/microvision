@@ -19,6 +19,7 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/microvision.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('libs/fontawesome/css/all.css') }}">
 </head>
 <body>
@@ -58,17 +59,8 @@
                                     <a class="dropdown-item" href="#">Vendor Access</a>
                                 </div>
                             </li>
-                            <li class="nav-item dropdown">
-                                <a id="userManagement" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                    User Management <span class="caret"></span>
-                                </a>
-
-                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userManagement">
-                                    <a class="dropdown-item" href="#">Global FTP address</a>
-                                    <a class="dropdown-item" href="#">CM Management</a>
-                                    <a class="dropdown-item" href="#">Vendor Management</a>
-                                    <a class="dropdown-item" href="#">Vendor Access</a>
-                                </div>
+                            <li class="nav-item">
+                                <a id="userManagement" class="nav-link" href="#">User Management</a>
                             </li>
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>

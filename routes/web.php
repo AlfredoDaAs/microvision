@@ -15,25 +15,12 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/globalftpaddress', function () {
-    return view('global_ftp_address');
-});
-
-Route::get('/cm_mgmt', function () {
-    return view('cm_mgmt');
-});
-
-Route::get('/manufacturer_mgmt', function () {
-    return view('manufacturer_mgmt');
-});
-
-Route::get('/manufacturer_access', function () {
-    return view('manufacturer_access');
-});
-
-Route::get('/user_mgmt', function () {
-    return view('user_mgmt');
-});
+Route::get('/home', 'AdminController@home');
+Route::get('/ftp_address', 'AdminController@ftp_address');
+Route::get('/cm_management', 'AdminController@cm_management');
+Route::get('/manufacturer_management', 'AdminController@manufacturer_mgmt');
+Route::get('/manufacturer_access', 'AdminController@manufacturer_access');
+Route::get('/user_management', 'AdminController@user_mgmt');
 
 Route::get('/asic_manufacturer', function () {
     return view('asic_manufacturer');
@@ -45,4 +32,4 @@ Route::get('/upload_confirmation', function () {
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/home2', 'HomeController@index')->name('home');
