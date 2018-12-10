@@ -15,7 +15,7 @@ class AdminMiddleware
      */
     public function handle($request, Closure $next)
     {
-        if(!$request->user()->isAdmin()){
+        if(!$request->user()->is_admin()){
             return redirect('/asic_manufacturer');
         }
 

@@ -8,7 +8,7 @@
                 <div class="card-header">Global FTP Address</div>
 
                 <div class="card-body">
-                    <form method="post" id="frmFtpAddress">
+                    <form method="post" id="frmFtpAddress" action="{{ route('update_ftp_settings') }}">
                         @csrf
                         <div class="row">
                             <div class="col-md-12">
@@ -20,29 +20,27 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>FTP Address</td>
-                                            <td><input type="text" class="form-control" id="ftpAddress" name="ftpAddress" placeholder="sftp://0.0.0.0" disabled></td>
-                                        </tr>
-                                        <tr>
-                                            <td>FTP Port</td>
-                                            <td><input class="form-control" type="text" id="ftpPort" name="ftpPort" placeholder="FTP Port" disabled></td>
-                                        </tr>
-                                        <tr>
-                                            <td>FTP Admin User</td>
-                                            <td><input class="form-control" type="text" id="ftpAdminUsr" name="ftpAdminUsr" placeholder="FTP Admin User" disabled></td>
-                                        </tr>
-                                        <tr>
-                                            <td>FTP Admin pwd</td>
-                                            <td><input class="form-control" type="password" id="ftpAdminPwd" name="ftpAdminPwd" placeholder="*******" disabled></td>
-                                        </tr>
+                                        @foreach($ftpsettings as $ftpsetting)
+                                            <tr>
+                                                <td>{{ $ftpsetting->SettingName }}</td>
+                                                <td>
+                                                    <input
+                                                        type="text"
+                                                        class="form-control ftpsetting"
+                                                        id="{{ $ftpsetting->SettingName }}"
+                                                        name="{{ $ftpsetting->SettingName }}"
+                                                        disabled required
+                                                        value="{{ $ftpsetting->SettingValue }}">
+                                                </td>
+                                            </tr>
+                                        @endforeach
                                     </tbody>
                                 </table>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-4 offset-md-4">
-                                <button type="submit" class="btn btn-success float-left px-4">
+                                <button type="submit" id="btnOk" class="btn btn-success float-left px-4" disabled>
                                     OK
                                 </button>
                                 <button type="button" class="btn btn-secondary float-right" onclick="ftp_address.edit();">

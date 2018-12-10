@@ -13,13 +13,12 @@ class UsersTableSeeder extends Seeder
     public function run()
     {
         DB::table('PortalUser')->insert([
-        	'ID' => 1,
-            'LoginName' => 'alfredo.davila@bringitps.com',
+            'LoginName' => 'alfredo',
             'UserName' => 'AlfredoDA',
             'Password' => bcrypt('alfredo'),
-            'ManufacturerID' => null,
+            'ManufacturerID' => 1,
             'Email' => 'alfredo.davila@bringitps.com',
-            'StatusID' => null
+            'StatusID' => 1
         ]);
     }
 }

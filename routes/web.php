@@ -11,16 +11,14 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
+Route::get('/', 'AdminController@home');
 Route::get('/home', 'AdminController@home');
-Route::get('/ftp_address', 'AdminController@ftp_address');
-Route::get('/cm_management', 'AdminController@cm_management');
-Route::get('/manufacturer_management', 'AdminController@manufacturer_mgmt');
-Route::get('/manufacturer_access', 'AdminController@manufacturer_access');
-Route::get('/user_management', 'AdminController@user_mgmt');
+Route::get('/ftp_address', 'AdminController@ftp_address')->name('ftp_address');
+Route::post('/update_ftp_settings', 'AdminController@update_ftp_settings')->name('update_ftp_settings');
+Route::get('/cm_management', 'AdminController@cm_management')->name('cm_management');
+Route::get('/manufacturer_management', 'AdminController@manufacturer_mgmt')->name('manufacturer_mgmt');
+Route::get('/manufacturer_access', 'AdminController@manufacturer_access')->name('manufacturer_access');
+Route::get('/user_management', 'AdminController@user_mgmt')->name('user_mgmt');
 
 Route::get('/asic_manufacturer', function () {
     return view('asic_manufacturer');

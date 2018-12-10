@@ -47,24 +47,26 @@
                                 <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
                             </li>--}}
                         @else
-                            <li class="nav-item dropdown">
-                                <a id="vendorManagement" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                    Vendor Management <span class="caret"></span>
-                                </a>
+                            @if(Auth::user()->is_admin())
+                                <li class="nav-item dropdown">
+                                    <a id="vendorManagement" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                        Vendor Management <span class="caret"></span>
+                                    </a>
 
-                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="vendorManagement">
-                                    <a class="dropdown-item" href="#">Global FTP address</a>
-                                    <a class="dropdown-item" href="#">CM Management</a>
-                                    <a class="dropdown-item" href="#">Vendor Management</a>
-                                    <a class="dropdown-item" href="#">Vendor Access</a>
-                                </div>
-                            </li>
-                            <li class="nav-item">
-                                <a id="userManagement" class="nav-link" href="#">User Management</a>
-                            </li>
+                                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="vendorManagement">
+                                        <a class="dropdown-item" href="{{ route('ftp_address') }}">Global FTP address</a>
+                                        <a class="dropdown-item" href="{{ route('cm_management') }}">CM Management</a>
+                                        <a class="dropdown-item" href="{{ route('manufacturer_mgmt') }}">Vendor Management</a>
+                                        <a class="dropdown-item" href="{{ route('manufacturer_access') }}">Vendor Access</a>
+                                    </div>
+                                </li>
+                                <li class="nav-item">
+                                    <a id="userManagement" class="nav-link" href="{{ route('user_mgmt') }}">User Management</a>
+                                </li>
+                            @endif
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                    {{ Auth::user()->name }} <span class="caret"></span>
+                                    {{ Auth::user()->UserName }} <span class="caret"></span>
                                 </a>
 
                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">

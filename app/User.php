@@ -17,6 +17,9 @@ class User extends Authenticatable
      */
 
     protected $table = "PortalUser";
+    protected $primaryKey = 'ID';
+
+    public $timestamps = false;
 
     protected $fillable = [
         'LoginName', 'UserName', 'Password', 'ManufacturerID', 'Email', 'StatusID'
@@ -28,23 +31,44 @@ class User extends Authenticatable
      * @var array
      */
     protected $hidden = [
-        'Password', 'remember_token',
+        'Password',
     ];
-
-    public function manufacturer() {
-        return $this->belongsTo('App\Manufacturer', 'ManufacturerID', 'ID');
-    }
 
     public function getAuthPassword()
     {
         return $this->Password;
     }
 
-    public function isAdmin(){
-        if($this->manufacturer->isAdmin){
+    public function manufacturer() {
+        return $this->belongsTo('App\Manufacturer', 'ManufacturerID');
+    }
+
+    public function is_admin(){
+        if($this->manufacturer->is_admin()){
             return true;
         }
 
         return false;
     }
+
+    public function status() {
+        return $this->belongsTo('App\Status', 'StatusID');
+    }
+
+    public function file_transfers() {
+        return $this->hasMany('App\FileTransfer', 'PortalUserID');
+    }
+
+    /**
+   * Overrides the method to ignore the remember token.
+   */
+    public function setAttribute($key, $value)
+    {
+        $isRememberTokenAttribute = $key == $this->getRememberTokenName();
+        if (!$isRememberTokenAttribute)
+        {
+            parent::setAttribute($key, $value);
+        }
+    }
+
 }
