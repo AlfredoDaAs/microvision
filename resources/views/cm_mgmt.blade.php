@@ -8,7 +8,7 @@
                 <div class="card-header">CM Management</div>
 
                 <div class="card-body">
-                    <form method="post" id="frmCmMgmt">
+                    <form method="post" id="frmCmMgmt" action="{{ route('cm_mgmt_save') }}">
                         @csrf
                         <div class="row">
                             <div class="col-md-12">
@@ -23,9 +23,9 @@
                                     </thead>
                                     <tbody>
                                         @foreach($cms as $cm)
-                                            <tr>
+                                            <tr class="folders">
                                                 <td>
-                                                    <span>{{ $cm->Description }}</span>
+                                                    <span class="">{{ $cm->Description }}</span>
                                                     <input
                                                         type="text"
                                                         class="form-control d-none"
@@ -42,7 +42,7 @@
                                                         placeholder="/ImportFiles/CM/Incoming"
                                                         value="{{ $cm->IncomingFolder }}">
                                                 </td>
-                                                <td><a href="#" class="removeCM"><i class="far fa-times-circle fa-2x"></i></a></td>
+                                                <td><a href="#" class="removeCM d-none" onclick="cm_mgmt.removeCM(this)"><i class="far fa-times-circle fa-2x"></i></a></td>
                                             </tr>
                                         @endforeach
                                     </tbody>

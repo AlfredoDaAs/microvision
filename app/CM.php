@@ -9,6 +9,8 @@ class CM extends Model
     protected $table = "CM";
     protected $primaryKey = 'ID';
 
+    public $timestamps = false;
+
     public function manufacturer_cm() {
     	return $this->belongsToMany('App\Manufacturer', 'ManufacturerCM', 'CMID', 'ManufacturerID');
     }

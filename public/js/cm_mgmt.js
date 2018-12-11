@@ -7,11 +7,15 @@ var cm_mgmt = {
 		if(!cm_mgmt.editing){
 			cm_mgmt.editing = 1;
 			$('#btnEdit').text('Cancel');
-			$('.new').removeClass('d-none');
+			$('.new, .removeCM').removeClass('d-none');
+			$('.folders').find('span').addClass('d-none');
+			$('.folders').find('input').removeClass('d-none');
 		}else{
 			cm_mgmt.editing = 0;
 			$('#btnEdit').text('Edit');
-			$('.new').addClass('d-none');
+			$('.new, .removeCM').addClass('d-none');
+			$('.folders').find('span').removeClass('d-none');
+			$('.folders').find('input').addClass('d-none');
 		}
 	},
 

@@ -41,7 +41,7 @@ class AdminController extends Controller
             $ftpsetting->save();
         }
 
-        return redirect()->route('ftp_address');
+        return redirect()->route('home');
     }
 
     public function cm_management(){
@@ -57,6 +57,37 @@ class AdminController extends Controller
             'status' => 'ok',
             'html' => view('cm.new_input')->render()
         ]);
+    }
+
+    public  function cm_mgmt_save(Request $request){
+        $rules = [
+            'txtName' => 'required|array|filled',
+            'txtIncomingFile' => 'required|array|filled'
+        ];
+
+        $request->validate($rules);
+
+        $user = Auth::user();
+        $manufacturer = $user->manufacturer;
+
+        $manufacturer->manufacturer_cm()->detach();
+
+        $txtNames = $request->txtName;
+        $txtIncomingFiles = $request->txtIncomingFile;
+
+        if(sizeof($txtNames) == sizeof($txtIncomingFiles)){
+            $count = sizeof($txtNames);
+            for ($i=0; $i < $count; $i++) {
+                if(!empty($txtNames[$i]) && !empty($txtIncomingFiles[$i])){
+                    $cm = new CM;
+                    $cm->Description = $txtNames[$i];
+                    $cm->IncomingFolder = $txtIncomingFiles[$i];
+                    $manufacturer->manufacturer_cm()->save($cm);
+                }
+            }
+        }
+
+        return redirect()->route('home');
     }
 
     public function manufacturer_mgmt(){
