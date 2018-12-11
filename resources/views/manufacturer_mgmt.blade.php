@@ -20,17 +20,19 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>ASICMFG001</td>
-                                            <td>
-                                                <div class="form-check">
-                                                  <input class="form-check-input" type="checkbox" value="" id="defaultCheck1" disabled>
-                                                  <label class="form-check-label" for="defaultCheck1">
-                                                    Enabled
-                                                  </label>
-                                                </div>
-                                            </td>
-                                        </tr>
+                                        @foreach($manufacturers as $manufacturer)
+                                            <tr>
+                                                <td>{{ $manufacturer->Description }}</td>
+                                                <td>
+                                                    <div class="form-check">
+                                                      <input class="form-check-input" type="checkbox" value="" id="defaultCheck1" disabled>
+                                                      <label class="form-check-label" for="defaultCheck1">
+                                                        Enabled
+                                                      </label>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        @endforeach
                                     </tbody>
                                 </table>
                             </div>

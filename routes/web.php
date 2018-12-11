@@ -11,9 +11,11 @@
 |
 */
 
+Auth::routes();
+
 /* Microvision Adminstration route access */
 Route::get('/', 'AdminController@home');
-Route::get('/home', 'AdminController@home');
+Route::get('/home', 'AdminController@home')->name('home');
 Route::get('/ftp_address', 'AdminController@ftp_address')->name('ftp_address');
 Route::post('/update_ftp_settings', 'AdminController@update_ftp_settings')->name('update_ftp_settings');
 Route::get('/cm_management', 'AdminController@cm_management')->name('cm_management');
@@ -30,7 +32,3 @@ Route::get('/asic_manufacturer', function () {
 Route::get('/upload_confirmation', function () {
     return view('upload_confirmation');
 });
-
-Auth::routes();
-
-Route::get('/home2', 'HomeController@index')->name('home');

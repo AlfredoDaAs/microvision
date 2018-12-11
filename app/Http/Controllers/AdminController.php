@@ -21,6 +21,7 @@ class AdminController extends Controller
     	return view('home');
     }
 
+    /* Global FTP address methods */
     public function ftp_address(){
     	$ftpsettings = FTPSetting::all();
 
@@ -44,6 +45,7 @@ class AdminController extends Controller
         return redirect()->route('home');
     }
 
+    /* CM Management methods */
     public function cm_management(){
         $user = Auth::user();
 
@@ -70,7 +72,9 @@ class AdminController extends Controller
         $user = Auth::user();
         $manufacturer = $user->manufacturer;
 
+        $cmids = $manufacturer->manufacturer_cm->pluck('ID')->toArray();
         $manufacturer->manufacturer_cm()->detach();
+        CM::whereIn('ID', $cmids)->delete();
 
         $txtNames = $request->txtName;
         $txtIncomingFiles = $request->txtIncomingFile;
@@ -90,14 +94,18 @@ class AdminController extends Controller
         return redirect()->route('home');
     }
 
+    /* Manufacturer Management methods */
     public function manufacturer_mgmt(){
-    	return view('manufacturer_mgmt');
+        $manufacturers = Manufacturer::all();
+    	return view('manufacturer_mgmt', ['manufacturers' => $manufacturers]);
     }
 
+    /* Manufacturer Access methods */
     public function manufacturer_access(){
     	return view('manufacturer_access');
     }
 
+    /* User Management methods */
     public function user_mgmt(){
     	return view('user_mgmt');
     }
