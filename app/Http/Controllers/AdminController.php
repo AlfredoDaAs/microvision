@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+
 use App\FTPSetting;
 use App\CM;
 use App\Manufacturer;
@@ -43,7 +45,18 @@ class AdminController extends Controller
     }
 
     public function cm_management(){
-    	return view('cm_mgmt');
+        $user = Auth::user();
+
+        $cms = $user->manufacturer->manufacturer_cm;
+
+    	return view('cm_mgmt', ['cms' => $cms]);
+    }
+
+    public function cm_mgmt_new(Request $request){
+        return response()->json([
+            'status' => 'ok',
+            'html' => view('cm.new_input')->render()
+        ]);
     }
 
     public function manufacturer_mgmt(){

@@ -6,3 +6,17 @@
     min-height: 300px;
     background-size: 400px;
 }
+
+.removeCM {
+	vertical-align: middle;
+}
+
+.removeCM > i {
+	vertical-align: middle;
+}
+
+#addCM {
+	position: absolute;
+    bottom: -35px;
+    right: 51px;
+}

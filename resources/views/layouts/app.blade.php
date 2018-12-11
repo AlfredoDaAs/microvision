@@ -10,6 +10,7 @@
     <title>{{ config('app.name', 'Laravel') }}</title>
 
     <!-- Scripts -->
+    <script type="text/javascript" src="{{ asset('js/jquery-3.3.1.min.js') }}"></script>
     <script src="{{ asset('js/app.js') }}" defer></script>
     @stack('scripts')
 
@@ -91,5 +92,13 @@
             @yield('content')
         </main>
     </div>
+    <script type="text/javascript">
+        $(function(){
+            $.ajaxSetup({
+                headers:
+                { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') }
+            });
+        });
+    </script>
 </body>
 </html>

@@ -12,32 +12,49 @@
                         @csrf
                         <div class="row">
                             <div class="col-md-12">
-                                <table class="table">
+                                <a href="#" class="d-none" id="addCM" onclick="cm_mgmt.addCM()"><i class="fas fa-plus-circle fa-2x"></i></a>
+                                <table class="table" id="tblCM">
                                     <thead>
                                         <tr>
                                             <th>CM Name</th>
                                             <th>Incoming Folder</th>
+                                            <th></th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>CM1</td>
-                                            <td><input type="text" class="form-control" name="cm[]" placeholder="/ImportFiles/CM1/Incoming" disabled></td>
-                                        </tr>
-                                        <tr>
-                                            <td>CM2</td>
-                                            <td><input type="text" class="form-control" name="cm[]" placeholder="/ImportFiles/CM2/Incoming" disabled></td>
-                                        </tr>
+                                        @foreach($cms as $cm)
+                                            <tr>
+                                                <td>
+                                                    <span>{{ $cm->Description }}</span>
+                                                    <input
+                                                        type="text"
+                                                        class="form-control d-none"
+                                                        name="txtName[]"
+                                                        placeholder="CM Name"
+                                                        value="{{ $cm->Description }}">
+                                                </td>
+                                                <td>
+                                                    <span>{{ $cm->IncomingFolder }}</span>
+                                                    <input
+                                                        type="text"
+                                                        class="form-control d-none"
+                                                        name="txtIncomingFile[]"
+                                                        placeholder="/ImportFiles/CM/Incoming"
+                                                        value="{{ $cm->IncomingFolder }}">
+                                                </td>
+                                                <td><a href="#" class="removeCM"><i class="far fa-times-circle fa-2x"></i></a></td>
+                                            </tr>
+                                        @endforeach
                                     </tbody>
                                 </table>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-md-4 offset-md-4">
-                                <button type="submit" class="btn btn-success float-left px-4">
+                        <div class="row justify-content-center">
+                            <div class="col-md-6">
+                                <button type="submit" id="btnOk" class="btn btn-success float-left px-4" disabled>
                                     OK
                                 </button>
-                                <button type="button" class="btn btn-secondary float-right" onclick="">
+                                <button type="button" id="btnEdit" class="btn btn-secondary float-right" onclick="cm_mgmt.edit()">
                                     Edit
                                 </button>
                             </div>
@@ -51,4 +68,5 @@
 @endsection
 
 @push('scripts')
+    <script src="{{ asset('js/cm_mgmt.js') }}"></script>
 @endpush
