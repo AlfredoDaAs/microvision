@@ -25,12 +25,18 @@
                                                 <td>{{ $ftpsetting->SettingName }}</td>
                                                 <td>
                                                     <input
-                                                        type="text"
                                                         class="form-control ftpsetting"
                                                         id="{{ $ftpsetting->SettingName }}"
                                                         name="{{ $ftpsetting->SettingName }}"
                                                         disabled required
-                                                        value="{{ $ftpsetting->SettingValue }}">
+                                                        @if($ftpsetting->SettingName == config('constants.ftp_settings.ftp_admin_pwd'))
+                                                            type="password"
+                                                            placeholder="********"
+                                                        @else
+                                                            type="text"
+                                                            value="{{ $ftpsetting->SettingValue }}"
+                                                        @endif
+                                                        >
                                                 </td>
                                             </tr>
                                         @endforeach

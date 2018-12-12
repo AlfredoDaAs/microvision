@@ -15,7 +15,7 @@
 	vertical-align: middle;
 }
 
-#addCM {
+.addElement {
 	position: absolute;
     bottom: -35px;
     right: 51px;

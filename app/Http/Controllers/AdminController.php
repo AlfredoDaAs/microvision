@@ -4,11 +4,14 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Validator;
 
 use App\FTPSetting;
 use App\CM;
 use App\Manufacturer;
 use App\User;
+use App\Status;
 
 class AdminController extends Controller
 {
@@ -38,7 +41,8 @@ class AdminController extends Controller
         $request->validate($rules);
 
         foreach ($ftpsettings as $ftpsetting) {
-            $ftpsetting->SettingValue = $request[$ftpsetting->SettingName];
+            $ftpsetting->SettingValue = ($ftpsetting->SettingName == config('constants.ftp_settings.ftp_admin_pwd'))?
+                Hash::make($request[$ftpsetting->SettingName]) : $request[$ftpsetting->SettingName];
             $ftpsetting->save();
         }
 
@@ -98,6 +102,67 @@ class AdminController extends Controller
     public function manufacturer_mgmt(){
         $manufacturers = Manufacturer::all();
     	return view('manufacturer_mgmt', ['manufacturers' => $manufacturers]);
+    }
+
+    public function manufacturer_mgmt_new(Request $request){
+        $rules = [
+            'data_id' => 'required'
+        ];
+
+        $validator = Validator::make($request->all(), $rules);
+
+        if($validator->fails()){
+            return response()->json([
+                'status' => 'error'
+            ]);
+        }
+
+        $data_id = ($request->data_id == null)? 0 : (int)$request->data_id + 1;
+
+        return response()->json([
+            'status' => 'ok',
+            'html' => view('manufacturer.new_input', ['data_id' => $data_id])->render()
+        ]);
+    }
+
+    public function manufacturer_mgmt_save(Request $request){
+        $rules = [
+            'txtDescription' => 'required|array|filled',
+            'status' => 'required|array',
+            'admin' => 'required|array'
+        ];
+
+        $request->validate($rules);
+
+        $ids = [];
+        $txtDescriptions = array_values($request->txtDescription);
+        $chkStatus = array_values($request->status);
+        $chkAdmins = array_values($request->admin);
+        $count = sizeof($txtDescriptions);
+
+        for ($i=0; $i < $count; $i++) {
+            if(!empty($txtDescriptions[$i])){
+                $status = ($chkStatus[$i])?
+                    Status::where('Description', config('constants.status.enabled'))->first()
+                    : Status::where('Description', config('constants.status.disabled'))->first();
+                $isAdmin = ($chkAdmins[$i])? config('constants.manufacturer.is_admin') : config('constants.manufacturer.is_not_admin');
+                $manufacturer = Manufacturer::where('Description', $txtDescriptions[$i])->first();
+                if(!$manufacturer){
+                    $manufacturer = new Manufacturer;
+                    $manufacturer->Description = $txtDescriptions[$i];
+                }
+
+                $manufacturer->IsAdmin = $isAdmin;
+                $manufacturer->StatusID = $status->id;
+                $manufacturer->save();
+
+                array_push($ids, $manufacturer->ID);
+            }
+        }
+
+        Manufacturer::whereNotIn('ID', $ids)->delete();
+
+        return redirect()->route('manufacturer_mgmt');
     }
 
     /* Manufacturer Access methods */

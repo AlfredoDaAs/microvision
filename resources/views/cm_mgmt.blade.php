@@ -12,7 +12,7 @@
                         @csrf
                         <div class="row">
                             <div class="col-md-12">
-                                <a href="#" class="d-none" id="addCM" onclick="cm_mgmt.addCM()"><i class="fas fa-plus-circle fa-2x"></i></a>
+                                <a href="#" class="addElement d-none" id="addCM" onclick="cm_mgmt.addCM()"><i class="fas fa-plus-circle fa-2x"></i></a>
                                 <table class="table" id="tblCM">
                                     <thead>
                                         <tr>
