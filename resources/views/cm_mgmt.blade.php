@@ -12,7 +12,7 @@
                         @csrf
                         <div class="row">
                             <div class="col-md-12">
-                                <a href="#" class="addElement d-none" id="addCM" onclick="cm_mgmt.addCM()"><i class="fas fa-plus-circle fa-2x"></i></a>
+                                <a href="#" class="addElement d-none" id="addCM" onclick="cm_mgmt.addCM()" style="z-index: 1;"><i class="fas fa-plus-circle fa-2x"></i></a>
                                 <table class="table" id="tblCM">
                                     <thead>
                                         <tr>
@@ -49,6 +49,15 @@
                                 </table>
                             </div>
                         </div>
+                        @if($errors->any())
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="alert alert-danger" role="alert">
+                                        {{ $errors->first('msg') }}
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
                         <div class="row justify-content-center">
                             <div class="col-md-6">
                                 <button type="submit" id="btnOk" class="btn btn-success float-left px-4" disabled>

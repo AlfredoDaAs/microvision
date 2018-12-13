@@ -51,9 +51,7 @@ class AdminController extends Controller
 
     /* CM Management methods */
     public function cm_management(){
-        $user = Auth::user();
-
-        $cms = $user->manufacturer->manufacturer_cm;
+        $cms = CM::all();
 
     	return view('cm_mgmt', ['cms' => $cms]);
     }
@@ -73,29 +71,38 @@ class AdminController extends Controller
 
         $request->validate($rules);
 
-        $user = Auth::user();
-        $manufacturer = $user->manufacturer;
-
-        $cmids = $manufacturer->manufacturer_cm->pluck('ID')->toArray();
-        $manufacturer->manufacturer_cm()->detach();
-        CM::whereIn('ID', $cmids)->delete();
-
         $txtNames = $request->txtName;
         $txtIncomingFiles = $request->txtIncomingFile;
+        $ids = [];
 
-        if(sizeof($txtNames) == sizeof($txtIncomingFiles)){
-            $count = sizeof($txtNames);
-            for ($i=0; $i < $count; $i++) {
-                if(!empty($txtNames[$i]) && !empty($txtIncomingFiles[$i])){
+        foreach ($txtNames as $key => $name) {
+            if(!empty($name) && !empty($txtIncomingFiles[$key])){
+                $cm = CM::where('Description', $name)->first();
+                if(!$cm){
                     $cm = new CM;
-                    $cm->Description = $txtNames[$i];
-                    $cm->IncomingFolder = $txtIncomingFiles[$i];
-                    $manufacturer->manufacturer_cm()->save($cm);
+                    $cm->Description = $name;
                 }
+                $cm->IncomingFolder = $txtIncomingFiles[$key];
+                $cm->save();
+                array_push($ids, $cm->ID);
             }
         }
 
-        return redirect()->route('home');
+        $otherCMs = CM::whereNotIn('ID', $ids)->get();
+        $cantDelete = false;
+        foreach ($otherCMs as $key => $cm) {
+            if(count($cm->manufacturer_cm) || count($cm->file_transfers)){
+                $cantDelete = true;
+            }else{
+                $cm->delete();
+            }
+        }
+
+        if($cantDelete){
+            return redirect()->back()->withErrors(['msg' => 'Some CMs can not be deleted because of related data']);
+        }
+
+        return redirect()->route('cm_management');
     }
 
     /* Manufacturer Management methods */
@@ -179,7 +186,50 @@ class AdminController extends Controller
 
     /* Manufacturer Access methods */
     public function manufacturer_access(){
-    	return view('manufacturer_access');
+        $manufacturers = Manufacturer::all();
+
+    	return view('manufacturer_access', ['manufacturers' => $manufacturers]);
+    }
+
+    public function manufacturer_access_cms(Request $request){
+        $rules = [
+            'selected_id' => 'required|numeric'
+        ];
+
+        $validator = Validator::make($request->all(), $rules);
+
+        if($validator->fails()){
+            return response()->json([
+                'status' => 'error'
+            ]);
+        }
+
+        $manufacturer = Manufacturer::find($request->selected_id);
+
+        $manufacturer_cms = $manufacturer->manufacturer_cm;
+        $manufacturer_cmids = $manufacturer_cms->pluck('ID')->toArray();
+
+        $available_cms = CM::whereNotIn('ID', $manufacturer_cmids)->get();
+
+        return response()->json([
+            'status' => 'ok',
+            'available_cms' => $available_cms->toArray(),
+            'asigned_cms' => $manufacturer_cms->toArray()
+        ]);
+    }
+
+    public function manufacturer_access_save(Request $request){
+        $rules = [
+            'drpManufacturer' => 'required|numeric',
+            'asigned_cms' => 'required|array'
+        ];
+
+        $request->validate($rules);
+
+        $manufacturer = Manufacturer::find($request->drpManufacturer);
+        $manufacturer->manufacturer_cm()->sync($request->asigned_cms);
+
+        return redirect()->route('manufacturer_access');
     }
 
     /* User Management methods */
