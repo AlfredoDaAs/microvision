@@ -67,6 +67,15 @@
                                 </table>
                             </div>
                         </div>
+                        @if($errors->any())
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="alert alert-danger" role="alert">
+                                        {{ $errors->first('msg') }}
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
                         <div class="row justify-content-center">
                             <div class="col-md-6">
                                 <button type="submit" id="btnOk" class="btn btn-success float-left px-4" disabled>

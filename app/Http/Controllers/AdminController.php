@@ -160,7 +160,19 @@ class AdminController extends Controller
             }
         }
 
-        Manufacturer::whereNotIn('ID', $ids)->delete();
+        $otherMmanufacturers = Manufacturer::whereNotIn('ID', $ids)->get();
+        $cantDelete = false;
+        foreach ($otherMmanufacturers as $key => $manufac) {
+            if(count($manufac->users) || count($manufac->file_transfers) || count($manufac->manufacturer_cm)){
+                $cantDelete = true;
+            }else{
+                $manufac->delete();
+            }
+        }
+
+        if($cantDelete){
+            return redirect()->back()->withErrors(['msg' => 'Some Manufacturers can not be deleted because of related data']);
+        }
 
         return redirect()->route('manufacturer_mgmt');
     }
