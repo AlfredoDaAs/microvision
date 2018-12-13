@@ -34,6 +34,8 @@ Route::post('/manufacturer_access/save', 'AdminController@manufacturer_access_sa
 
 Route::get('/user_management', 'AdminController@user_mgmt')->name('user_mgmt');
 
+Route::post('/load_user', 'AdminController@load_user')->name('load_user');
+
 Route::get('/asic_manufacturer', function () {
     return view('asic_manufacturer');
 });

@@ -234,6 +234,29 @@ class AdminController extends Controller
 
     /* User Management methods */
     public function user_mgmt(){
-    	return view('user_mgmt');
+        $users = User::with(['manufacturer', 'status'])->paginate();
+
+    	return view('user_mgmt', ['users' => $users]);
+    }
+
+    public function load_user(Request $request){
+        $rules = [
+            'user_id' => 'required|numeric'
+        ];
+
+        $validator = Validator::make($request->all(), $rules);
+
+        if($validator->fails()){
+            return response()->json([
+                'status' => 'error'
+            ]);
+        }
+
+        $user = User::with(['manufacturer', 'status'])->find($request->user_id);
+
+        return response()->json([
+            'status' => 'ok',
+            'user' => $user->toArray()
+        ]);
     }
 }
