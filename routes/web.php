@@ -33,8 +33,10 @@ Route::post('/manufacturer_access/cms', 'AdminController@manufacturer_access_cms
 Route::post('/manufacturer_access/save', 'AdminController@manufacturer_access_save')->name('manufacturer_access_save');
 
 Route::get('/user_management', 'AdminController@user_mgmt')->name('user_mgmt');
+Route::post('/user_management/save', 'AdminController@user_mgmt_save')->name('user_mgmt_save');
 
 Route::post('/load_user', 'AdminController@load_user')->name('load_user');
+Route::post('/load_users_table', 'AdminController@load_users_table')->name('load_users_table');
 
 Route::get('/asic_manufacturer', function () {
     return view('asic_manufacturer');

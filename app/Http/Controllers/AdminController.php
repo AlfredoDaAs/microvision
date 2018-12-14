@@ -235,8 +235,9 @@ class AdminController extends Controller
     /* User Management methods */
     public function user_mgmt(){
         $users = User::with(['manufacturer', 'status'])->paginate();
+        $manufacturers = Manufacturer::all();
 
-    	return view('user_mgmt', ['users' => $users]);
+    	return view('user_mgmt', ['users' => $users, 'manufacturers' => $manufacturers]);
     }
 
     public function load_user(Request $request){
@@ -253,10 +254,49 @@ class AdminController extends Controller
         }
 
         $user = User::with(['manufacturer', 'status'])->find($request->user_id);
+        $user->status_value = ($user->status->Description == config('constants.status.enabled'))? 1 : 0;
 
         return response()->json([
             'status' => 'ok',
             'user' => $user->toArray()
         ]);
+    }
+
+    public function load_users_table(Request $request){
+    }
+
+    public function user_mgmt_save(Request $request){
+        $rules = [
+            'user_id' => 'required|numeric',
+            'txtLoginName' => 'required',
+            'txtUserName' => 'required',
+            'txtEmail' => 'required|email',
+            'drpManufacture' => 'required|numeric'
+        ];
+
+        $validator = Validator::make($request->all(), $rules);
+
+        if($validator->fails()){
+            return response()->json([
+                'status' => 'error',
+                'errors' => $validator->errors()
+            ]);
+        }
+
+        if($request->user_id){
+            $user = User::find($request->user_id);
+        }else{
+            if(empty($request->txtPassword)){
+                return response()->json([
+                    'status' => 'error',
+                    'errors' => ['txtPassword': 'The txt password field is required.']
+                ]);
+            }
+
+            $user = new User;
+            $user->Password = Hash::make($request->txtPassword);
+        }
+
+        
     }
 }
