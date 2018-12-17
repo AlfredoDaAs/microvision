@@ -34,9 +34,10 @@ Route::post('/manufacturer_access/save', 'AdminController@manufacturer_access_sa
 
 Route::get('/user_management', 'AdminController@user_mgmt')->name('user_mgmt');
 Route::post('/user_management/save', 'AdminController@user_mgmt_save')->name('user_mgmt_save');
+Route::post('/user_management/delete', 'AdminController@user_mgmt_delete')->name('user_mgmt_delete');
 
 Route::post('/load_user', 'AdminController@load_user')->name('load_user');
-Route::post('/load_users_table', 'AdminController@load_users_table')->name('load_users_table');
+Route::post('/load_users_card', 'AdminController@load_users_card')->name('load_users_card');
 
 Route::get('/asic_manufacturer', function () {
     return view('asic_manufacturer');

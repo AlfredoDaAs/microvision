@@ -262,16 +262,80 @@ class AdminController extends Controller
         ]);
     }
 
-    public function load_users_table(Request $request){
-    }
-
     public function user_mgmt_save(Request $request){
         $rules = [
             'user_id' => 'required|numeric',
             'txtLoginName' => 'required',
             'txtUserName' => 'required',
             'txtEmail' => 'required|email',
-            'drpManufacture' => 'required|numeric'
+            'drpManufacture' => 'required|numeric',
+            'txtPassword' => 'required_if:user_id,0|min:6|regex:/^.*(?=.{3,})(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[\d\X])(?=.*[!$#%]).*$/'
+        ];
+
+        parse_str($request->data, $arrRequest);
+
+        $validator = Validator::make($arrRequest, $rules);
+
+        if($validator->fails()){
+            return response()->json([
+                'status' => 'error',
+                'errors' => $validator->errors()
+            ]);
+        }
+
+        $user_id = $arrRequest['user_id'];
+        $manufacturerId = $arrRequest['drpManufacture'];
+        $loginName = $arrRequest['txtLoginName'];
+        $userName = $arrRequest['txtUserName'];
+        $email = $arrRequest['txtEmail'];
+
+        if($user_id){
+            $user = User::find($user_id);
+
+            if(!empty($arrRequest['txtPassword'])){
+                $user->Password = Hash::make($arrRequest['txtPassword']);
+            }
+        }else{
+            $user = new User;
+            $user->Password = Hash::make($arrRequest['txtPassword']);
+        }
+
+        $manufacturer = Manufacturer::find($manufacturerId);
+        $status = isset($arrRequest['chkStatus'])? 
+            Status::where('Description', config('constants.status.enabled'))->first()
+            : Status::where('Description', config('constants.status.disabled'))->first();
+
+        if(!$manufacturer){
+            return response()->json([
+                'status' => 'error',
+                'errors' => ['msg' => 'There was an error finding the Manufacturer']
+            ]);
+        }
+
+        $user->LoginName = $loginName;
+        $user->UserName = $userName;
+        $user->Email = $email;
+        $user->ManufacturerID = $manufacturer->ID;
+        $user->StatusID = $status->id;
+        $user->save();
+
+        return response()->json([
+            'status' => 'ok'
+        ]);
+    }
+
+    public function load_users_card(Request $request){
+        $users = User::with(['manufacturer', 'status'])->paginate();
+        $users->setPath('/user_management');
+        return response()->json([
+                'status' => 'ok',
+                'html' => view('users.users_card', ['users' => $users])->render()
+            ]);
+    }
+
+    public function user_mgmt_delete(Request $request){
+        $rules = [
+            'user_id' => 'required|integer|gt:0'
         ];
 
         $validator = Validator::make($request->all(), $rules);
@@ -283,20 +347,24 @@ class AdminController extends Controller
             ]);
         }
 
-        if($request->user_id){
-            $user = User::find($request->user_id);
-        }else{
-            if(empty($request->txtPassword)){
-                return response()->json([
-                    'status' => 'error',
-                    'errors' => ['txtPassword': 'The txt password field is required.']
-                ]);
-            }
-
-            $user = new User;
-            $user->Password = Hash::make($request->txtPassword);
+        $user = User::find($request->user_id);
+        if($user->ID == Auth::user()->ID){
+            return response()->json([
+                'status' => 'error'
+            ]);
         }
 
-        
+        if(count($user->file_transfers)){
+            return response()->json([
+                'status' => 'error',
+                'errors' => ['msg' => 'User can not be deleted because of related data']
+            ]);
+        }
+
+        $user->delete();
+
+        return response()->json([
+            'status' => 'ok'
+        ]);
     }
 }

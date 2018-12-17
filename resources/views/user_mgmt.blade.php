@@ -3,51 +3,8 @@
 @section('content')
 <div class="container">
     <div class="row justify-content-center">
-        <div class="col-md-12">
-            <div class="card">
-                <div class="card-header">
-                    User Management
-                </div>
-
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <table class="table table-striped">
-                                <thead>
-                                    <tr>
-                                        <th>Login Name</th>
-                                        <th>User Name</th>
-                                        <th>Password</th>
-                                        <th>Manufacture</th>
-                                        <th>Email</th>
-                                        <th>Status</th>
-                                        <th><i class="fas fa-bolt"></i> Edit</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach($users as $user)
-                                        <tr>
-                                            <td>{{ $user->LoginName }}</td>
-                                            <td>{{ $user->UserName }}</td>
-                                            <td>********</td>
-                                            <td>{{ $user->manufacturer->Description }}</td>
-                                            <td>{{ $user->Email }}</td>
-                                            <td>{{ ($user->status->Description == config('constants.status.enabled'))? 'Enabled' : 'Disabled' }}</td>
-                                            <td><a href="#" onclick="user_mgmt.openEdit({{$user->ID}})"><i class="far fa-edit"></i></a></td>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>  
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <button type="button" id="btnAdd" class="btn btn-success px-4 float-right" onclick="user_mgmt.openEdit()">Add</button>
-                            {{ $users->links() }}
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <div class="col-md-12" id="contentCard">
+            @include('users.users_card', ['users' => $users])
         </div>
     </div>
 
@@ -98,6 +55,13 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="row d-none" id="errors">
+                            <div class="col-md-12">
+                                <div class="alert alert-danger" role="alert">
+                                    <ul></ul>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -107,9 +71,34 @@
             </div>
         </div>
     </div>
+
+    <div class="modal fade" tabindex="-1" role="dialog" id="deleteUserModal">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Delete - <span class="deleteTitle"></span></h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <p>Are you sure you want to delete <span class="deleteTitle"></span>?</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-danger" onclick="user_mgmt.delete()">Delete</button>
+          </div>
+        </div>
+      </div>
+    </div>
 </div>
 @endsection
 
 @push('scripts')
     <script type="text/javascript" src="{{ asset('js/user_mgmt.js') }}"></script>
+    <script type="text/javascript">
+        $(function(){
+            user_mgmt.init();
+        });
+    </script>
 @endpush
