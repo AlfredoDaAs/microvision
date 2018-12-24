@@ -39,10 +39,5 @@ Route::post('/user_management/delete', 'AdminController@user_mgmt_delete')->name
 Route::post('/load_user', 'AdminController@load_user')->name('load_user');
 Route::post('/load_users_card', 'AdminController@load_users_card')->name('load_users_card');
 
-Route::get('/asic_manufacturer', function () {
-    return view('asic_manufacturer');
-});
-
-Route::get('/upload_confirmation', function () {
-    return view('upload_confirmation');
-});
+Route::get('/asic_manufacturer', 'ManufacturerController@asic_manufacturer')->name('asic_manufacturer');
+Route::get('/upload_confirmation', 'ManufacturerController@upload_confirmation')->name('upload_confirmation');
