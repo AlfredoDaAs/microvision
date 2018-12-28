@@ -11,7 +11,7 @@
 |
 */
 
-Auth::routes();
+Auth::routes(['register' => false]);
 
 /* Microvision Adminstration route access */
 Route::get('/', 'AdminController@home');
