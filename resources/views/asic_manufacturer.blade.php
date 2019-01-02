@@ -3,18 +3,21 @@
 @section('content')
 <div class="container">
     <div class="row justify-content-center">
-        <h3>Welcome, John Doe</h3>
+        <h3>Welcome, {{ Auth::user()->UserName }}</h3>
     </div>
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
                 <div class="card-body">
-                    <form method="post" id="frmManufacturerMgmt">
+                    <form method="post" id="frmManufacturerMgmt" action="{{ route('upload_file') }}" enctype="multipart/form-data">
                         @csrf
                         <div class="form-group row">
                             <label for="drpCM" class="col-md-2 offset-md-3">Select a CM: </label>
-                            <select class="form-control col-md-4" id="drpCM" name="drpCM">
-                              <option>CM1</option>
+                            <select class="form-control col-md-4" id="drpCM" name="cm">
+                              <option>Select a CM</option>
+                              @foreach($cms as $cm)
+                                <option value="{{ $cm->ID }}">{{ $cm->Description }}</option>
+                              @endforeach
                             </select>
                         </div>
                         <div class="form-group row">
@@ -23,7 +26,7 @@
                                 <span class="input-group-text" id="inputGroupFileAddon01">Upload</span>
                               </div>
                               <div class="custom-file">
-                                <input type="file" class="custom-file-input" id="txtFile" aria-describedby="inputGroupFileAddon01">
+                                <input type="file" class="custom-file-input" name="file" id="txtFile" aria-describedby="inputGroupFileAddon01">
                                 <label class="custom-file-label" for="txtFile">Choose file</label>
                               </div>
                             </div>

@@ -40,4 +40,5 @@ Route::post('/load_user', 'AdminController@load_user')->name('load_user');
 Route::post('/load_users_card', 'AdminController@load_users_card')->name('load_users_card');
 
 Route::get('/asic_manufacturer', 'ManufacturerController@asic_manufacturer')->name('asic_manufacturer');
+Route::post('/asic_manufacturer/upload', 'ManufacturerController@upload_file')->name('upload_file');
 Route::get('/upload_confirmation', 'ManufacturerController@upload_confirmation')->name('upload_confirmation');

@@ -7,6 +7,9 @@ return [
 	],
 
 	'ftp_settings' => [
+		'ftp_host' 	=> 'FTPAddress',
+		'ftp_port'		=> 'FTPPort',
+		'ftp_admin_usr'	=>	'FTPAdminUser',
 		'ftp_admin_pwd' => 'FTPAdminPwd'
 	],
 
