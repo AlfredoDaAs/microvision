@@ -16,5 +16,8 @@ return [
 	'manufacturer' => [
 		'is_admin' => 1,
 		'is_not_admin' => 0
-	]
+	],
+
+	'ftp_port'	=> 21,
+	'sftp_port' => 22
 ];
