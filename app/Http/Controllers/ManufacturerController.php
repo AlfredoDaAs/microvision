@@ -26,8 +26,8 @@ class ManufacturerController extends Controller
 
 	public function upload_file(Request $request)
 	{
-		//phpinfo();
-		die();
+		/*phpinfo();
+		die();*/
 		$rules = [
 			'cm' => 'required|integer',
 			'file' => 'required|file'
@@ -45,8 +45,9 @@ class ManufacturerController extends Controller
 		}
 
 		if($cm && count($config_ftp)){
+			//dd($config_ftp);
 			$data = [
-                     'host'     => $config_ftp[config('constants.ftp_settings.ftp_host')],
+                     'host'     => '52.91.48.80',//$config_ftp[config('constants.ftp_settings.ftp_host')],
                      'username' => $config_ftp[config('constants.ftp_settings.ftp_admin_usr')],
                      'password' => 'ftp1234',//$config_ftp[config('constants.ftp_settings.ftp_admin_pwd')],
                      'port'     => $config_ftp[config('constants.ftp_settings.ftp_port')],
@@ -67,7 +68,7 @@ class ManufacturerController extends Controller
 	 		$now = Carbon::now()->format('YmdHis');
 
 	        //filename to store
-	        $filenametostore = $manufacturer->Description .'_'. $cm->Description .'_'. $now .'.'.$extension;
+	        $filenametostore = $cm->IncomingFolder .'/'. $manufacturer->Description .'_'. $cm->Description .'_'. $now .'.'.$extension;
 	 
 	        //Upload File to external server
 	        $ftp->put($filenametostore, fopen($request->file('file'), 'r+'));
